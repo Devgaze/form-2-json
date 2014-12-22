@@ -2,21 +2,40 @@
 
   'use strict';
 
-  function Form2JSON(elName){
+  var formEl,
+      eList,
+      output = {};
 
-    this.formEl     = document.getElementById(elName),
-    this.eList      = this.formEl.elements,
-    this.output     = {};
-
-    this._traverseForm();
-    this.output = JSON.stringify(this.output);
-    console.log(this.output);
+  function extend(x, y) {
+    for(var k in y) {
+      if(y.hasOwnProperty(k)) {
+        x[k] = y[k];
+      }
+    }
+    return x;
   }
 
-  Form2JSON.prototype._traverseForm = function (){
-    for (var i=0; i<=this.eList.length; i++){
+  Form2JSON.prototype.options = {
+      aggregator: ':'
+    // , corelator:  '|'
+    // , numerator:  '#'
+  }
+  function Form2JSON(elName, options){
 
-      var currentElement = this.eList[i];
+    formEl  = document.getElementById(elName),
+    eList   = formEl.elements,
+    output  = {},
+    extend(this.options, options);
+
+    _traverseForm();
+    console.log(JSON.stringify(output));
+  }
+
+
+  function _traverseForm (){
+    for (var i=0; i<=eList.length; i++){
+
+      var currentElement = eList[i];
 
       if (typeof currentElement !== 'undefined') {
 
@@ -31,17 +50,17 @@
           case 'radio':
           case 'textarea':
           case 'select-one':
-            this.output[propertyName] = currentElement.value;
+            output[propertyName] = currentElement.value;
             break;
           case 'checkbox':
-            if (!this.output[propertyName]){
-              this.output[propertyName] = (checkboxInstanceNr > 0) ? [] : null;
+            if (!output[propertyName]){
+              output[propertyName] = (checkboxInstanceNr > 0) ? [] : null;
             }
 
             if(checkboxInstanceNr > 0){
-              this.output[propertyName].push(checkboxValue);
+              output[propertyName].push(checkboxValue);
             } else {
-              this.output[propertyName] = checkboxValue;
+              output[propertyName] = checkboxValue;
             }
             break;
           case 'select-multiple':
@@ -52,18 +71,13 @@
                 multiSelectValue.push(null);
               }
             }
-            this.output[currentElement.getAttribute('name')] = multiSelectValue;
+            output[currentElement.getAttribute('name')] = multiSelectValue;
             break;
           default:
             break;
         }
       }
     }
-  }
-
-  Form2JSON.prototype._getElementValue = function (el){
-
-    return;
   }
 
   window.Form2JSON = Form2JSON;
