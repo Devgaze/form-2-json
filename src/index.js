@@ -49,10 +49,10 @@
             break;
           case 'checkbox':
             if (!ns.o[propName]){
-              ns.o[propName] = (checkSiblings > 0) ? [] : currEl.checked;
+              ns.o[propName] = (checkSiblings > 1) ? [] : currEl.checked;
             }
-
-            if(checkSiblings > 0){
+            console.log (checkSiblings)
+            if(checkSiblings > 1){
               if (currEl.checked){
                 // if (currEl.value != "" && currEl.value != "on")
                 ns.o[propName].push(currEl.value);
