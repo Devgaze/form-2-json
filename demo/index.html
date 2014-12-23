@@ -31,6 +31,21 @@
         <label for="home-address">You live at</label>
         <textarea name="home-address" id="home-address"></textarea>
       </div>
+      <fieldset><legend>Address</legend>
+        <div>
+          <input type="text" name="address.city" />
+        </div>
+        <div>
+          <input type="text" name="address.country" />
+        </div>
+        <div>
+          <input type="text" name="address.postal" />
+        </div>
+        <div>
+          <input type="text" name="address.street" />
+        </div>
+      </fieldset>
+
       <div>
         <label for="public-privacy">And you would like your privacy set to</label>
         <input type="radio" name="privacy" id="public-privacy" value="1" /> <label for="public-privacy">public</label>
@@ -62,6 +77,10 @@
         </div>
       </fieldset>
       <div>
+        <label for="active">Active</label>
+        <input type="checkbox" name="active" id="active" />
+      </div>
+      <div>
         <input type="button" name="submit" id="submit" value="Click me" />
       </div>
     </form>
@@ -72,7 +91,7 @@
 
         document.getElementById('submit').onclick = function(e){
           e.preventDefault();
-          var xz = new Form2JSON('myForm');
+          Form2JSON.load('myForm');
         }
 
       }, false);

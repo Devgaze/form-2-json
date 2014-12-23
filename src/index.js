@@ -1,11 +1,24 @@
-;(function (window) {
-
+;(function (ns) {
   'use strict';
 
-  var formEl,
-      eList,
-      output = {};
+  ns.el       = null,
+  ns.o        = {},
+  ns.settings = {
+    delimiter: "."
+  };
 
+  ns.load = function (el){
+    if(ns.el){
+      ns.o = {}; // Firefox needs this
+    } else {
+      ns.el = document.getElementById(el);
+    }
+    ns.items  = ns.el.elements;
+    parseForm();
+    console.log(JSON.stringify(ns.o))
+  }
+
+  // privates
   function extend(x, y) {
     for(var k in y) {
       if(y.hasOwnProperty(k)) {
@@ -15,63 +28,44 @@
     return x;
   }
 
-  Form2JSON.prototype.options = {
-      aggregator: ':'
-    // , corelator:  '|'
-    // , numerator:  '#'
-  }
-  function Form2JSON(elName, options){
+  function parseForm(){
+    for (var i=0; i<=ns.items.length; i++){
 
-    formEl  = document.getElementById(elName),
-    eList   = formEl.elements,
-    output  = {},
-    extend(this.options, options);
+      var currEl = ns.items[i];
 
-    _traverseForm();
-    console.log(JSON.stringify(output));
-  }
-
-
-  function _traverseForm (){
-    for (var i=0; i<=eList.length; i++){
-
-      var currentElement = eList[i];
-
-      if (typeof currentElement !== 'undefined') {
+      if (typeof currEl !== 'undefined') {
 
         // handle different value attributes
-        var multiSelectValue    = [],
-            checkboxValue       = (currentElement.checked) ? currentElement.value : null,
-            propertyName        = currentElement.getAttribute('name'),
-            checkboxInstanceNr  = document.getElementsByName(propertyName).length;
+        var listValues    = [],
+            propName      = currEl.getAttribute('name'),
+            checkSiblings = document.getElementsByName(propName).length;
 
-        switch(currentElement.type){
+        switch(currEl.type){
           case 'text':
           case 'radio':
           case 'textarea':
           case 'select-one':
-            output[propertyName] = currentElement.value;
+            ns.o[propName] = currEl.value;
             break;
           case 'checkbox':
-            if (!output[propertyName]){
-              output[propertyName] = (checkboxInstanceNr > 0) ? [] : null;
+            if (!ns.o[propName]){
+              ns.o[propName] = (checkSiblings > 0) ? [] : currEl.checked;
             }
 
-            if(checkboxInstanceNr > 0){
-              output[propertyName].push(checkboxValue);
-            } else {
-              output[propertyName] = checkboxValue;
+            if(checkSiblings > 0){
+              if (currEl.checked){
+                // if (currEl.value != "" && currEl.value != "on")
+                ns.o[propName].push(currEl.value);
+              }
             }
             break;
           case 'select-multiple':
-            for(var j=0; j<=currentElement.options.length-1; j++){
-              if (typeof currentElement.options[j] != 'undefined' && currentElement.options[j].selected){
-                multiSelectValue.push(currentElement.options[j].value);
-              } else {
-                multiSelectValue.push(null);
+            for(var j=0; j<=currEl.options.length-1; j++){
+              if (typeof currEl.options[j] != 'undefined' && currEl.options[j].selected){
+                listValues.push(currEl.options[j].value);
               }
             }
-            output[currentElement.getAttribute('name')] = multiSelectValue;
+            ns.o[currEl.getAttribute('name')] = listValues;
             break;
           default:
             break;
@@ -80,6 +74,4 @@
     }
   }
 
-  window.Form2JSON = Form2JSON;
-
-})(window);
+})( window.Form2JSON = window.Form2JSON || {} );
