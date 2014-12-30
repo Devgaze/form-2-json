@@ -10,9 +10,7 @@
   ns.load = function (el){
     ns.o = {};
 
-    if(ns.el){
-      // ns.o = {}; // Firefox needs this
-    } else {
+    if(!ns.el){
       ns.el = document.getElementById(el);
       ns.items  = ns.el.elements;
     }
@@ -24,7 +22,8 @@
   function mapForm(){
     for (var i=0; i<=ns.items.length; i++){
       var currEl = ns.items[i];
-      if (typeof currEl !== 'undefined' && currEl.type != 'fieldset') {
+
+      if (typeof currEl !== 'undefined' && currEl.type != 'fieldset' && currEl.type != 'button') {
         var propName  = currEl.getAttribute('name'),
             propValue = getElValue(currEl);
 
@@ -73,17 +72,23 @@
           v = currEl.value || '';
           break;
         case 'checkbox':
-          console.log(currEl.value)
-          if(currEl.value != '' && currEl.value != 'on'){
-            if (currEl.checked) {
-              v = currEl.value;
-            } else {
+          if (hasSiblings(currEl.name)){
+            v = (currEl.name in ns.o) ? ns.o[currEl.name] : lv;
+          }
+
+          if(currEl.value != ""){
+            if(currEl.value == "on"){
               v = currEl.checked;
+            } else {
+              if (hasSiblings(currEl.name) && currEl.checked){
+                v.push(currEl.value);
+              } else {
+                if(currEl.checked) v = currEl.value;
+              }
             }
           } else {
             v = currEl.checked;
           }
-          // v = (currEl.value != "" && currEl.value != "on") ? (currEl.checked) ? currEl.value : currEl.checked : currEl.checked ;
           break;
         case 'select-multiple':
           for(var i=0; i<=currEl.options.length-1; i++){
@@ -100,13 +105,10 @@
     return v;
   }
 
-  function extend(x, y) {
-    for(var k in y) {
-      if(y.hasOwnProperty(k)) {
-        x[k] = y[k];
-      }
-    }
-    return x;
+  function hasSiblings(elName){
+    if (document.getElementsByName(elName).length > 1) return true;
+    return false;
   }
+
 
 })( window.Form2JSON = window.Form2JSON || {} );
