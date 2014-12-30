@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
+    <title>Form-2-JSON demo page</title>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -12,6 +12,70 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style type="text/css">
+      #output pre
+      {
+        margin: 1em auto;
+        padding: 1em;
+        background-color:
+        display: none;
+        word-wrap: break-word;
+      }
+      pre.flash
+      {
+        display: block;
+        -webkit-animation: flash 3s;
+        -moz-animation: flash 3s;
+        -o-animation: flash 3s;
+        animation: flash 3s;
+      }
+
+      @-webkit-keyframes flash {
+        from {
+          background-color: rgba(255, 255, 0, .25);
+          color: rgba(255, 255, 0, .25);
+        }
+
+        to {
+          background-color: rgba(255, 255, 0, 0);
+          color: rgba(0, 0, 0, 1);
+        }
+      }
+      @-moz-keyframes flash {
+        from {
+          background-color: rgba(255, 255, 0, .25);
+          color: rgba(255, 255, 0, .25);
+        }
+
+        to {
+          background-color: rgba(255, 255, 0, 0);
+          color: rgba(0, 0, 0, 1);
+        }
+      }
+      @-o-keyframes flash {
+        from {
+          background-color: rgba(255, 255, 0, .25);
+          color: rgba(255, 255, 0, .25);
+        }
+
+        to {
+          background-color: rgba(255, 255, 0, 0);
+          color: rgba(0, 0, 0, 1);
+        }
+      }
+      @keyframes flash {
+        from {
+          background-color: rgba(255, 255, 0, .25);
+          color: rgba(255, 255, 0, .25);
+        }
+
+        to {
+          background-color: rgba(255, 255, 0, 0);
+          color: rgba(0, 0, 0, 1);
+        }
+      }
+
+    </style>
   </head>
   <body>
     <h1>Demo</h1>
@@ -27,22 +91,22 @@
           <option value="m">man</option>
         </select>
       </div>
-      <div>
-        <label for="home-address">You live at</label>
-        <textarea name="home-address" id="home-address"></textarea>
-      </div>
-      <fieldset><legend>Address</legend>
+      <fieldset><legend>Home address</legend>
         <div>
-          <input type="text" name="address.city" />
+          <label for="city">City</label>
+          <input type="text" name="home.address.city" id="city" />
         </div>
         <div>
-          <input type="text" name="address.country" />
+          <label for="country">Country</label>
+          <input type="text" name="home.address.country" id="country" />
         </div>
         <div>
-          <input type="text" name="address.postal" />
+          <label for="postal">Postal code</label>
+          <input type="text" name="home.address.postal" id="postal" />
         </div>
         <div>
-          <input type="text" name="address.street" />
+          <label for="street">Street</label>
+          <input type="text" name="home.address.street" id="street" />
         </div>
       </fieldset>
 
@@ -53,16 +117,16 @@
       </div>
       <fieldset><legend>You like...</legend>
         <div>
-          <input type="checkbox" name="brand" id="audi" value="audi" /> <label for="audi">Audi</label>
+          <input type="checkbox" name="car" id="audi" value="audi" /> <label for="audi">Audi</label>
         </div>
         <div>
-          <input type="checkbox" name="brand" id="bmw" value="bmw" /> <label for="bmw">BMW</label>
+          <input type="checkbox" name="car" id="bmw" value="bmw" /> <label for="bmw">BMW</label>
         </div>
         <div>
-          <input type="checkbox" name="brand" id="ford" value="ford" /> <label for="ford">Ford</label>
+          <input type="checkbox" name="car" id="ford" value="ford" /> <label for="ford">Ford</label>
         </div>
         <div>
-          <input type="checkbox" name="brand" id="dodge" value="dodge" /> <label for="dodge">Dodge</label>
+          <input type="checkbox" name="car" id="dodge" value="dodge" /> <label for="dodge">Dodge</label>
         </div>
       </fieldset>
       <fieldset><legend>And not so much...</legend>
@@ -81,21 +145,44 @@
         <input type="checkbox" name="active" id="active" />
       </div>
       <div>
+        <label for="note">Final words</label>
+        <textarea name="note" id="note"></textarea>
+      </div>
+      <div>
         <input type="button" name="submit" id="submit" value="Click me" />
       </div>
     </form>
+    <div id="output">
+      <h2>Output</h2>
+      <pre></pre>
+    </div>
     <script src="../src/index.js" type="text/javascript"></script>
     <script type="text/javascript">
+      var result,
+          output  = document.getElementById('output'),
+          pre     = document.getElementsByTagName('PRE')[0],
+          submit  = document.getElementById('submit');
+
+      function showResult(txt){
+        pre.innerHTML = txt;
+        pre.className = 'flash';
+      }
 
       document.addEventListener('DOMContentLoaded', function() {
-
-        document.getElementById('submit').onclick = function(e){
+        submit.onclick = function(e){
           e.preventDefault();
+
+          if (pre.className == 'flash'){
+            output.removeChild(pre);
+            pre = document.createElement('pre');
+            output.appendChild(pre);
+          }
+
           Form2JSON.load('myForm');
+          result = Form2JSON.o;
+          showResult(result);
         }
-
       }, false);
-
 
     </script>
   </body>
