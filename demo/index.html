@@ -181,7 +181,7 @@
         pre.innerHTML = txt;
         pre.className = 'flash';
       }
-      var mySerializer = new Form2JSON('myForm');
+      var mySerializer = new Form2JSON('myForm',{delimiter:'.'});
 
       document.addEventListener('DOMContentLoaded', function() {
         submit.onclick = function(e){
