@@ -4,6 +4,7 @@
   var obj = {};
 
   ns.Form2JSON = function(elID){
+
     var defaults = { delimiter: "." };
 
     this.o = {},
@@ -49,6 +50,7 @@
     }
 
     this.o = JSON.stringify(this.o, undefined, 2);
+
   }
 
   function delimitedToObject (obj, path, value){
