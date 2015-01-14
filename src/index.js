@@ -4,68 +4,51 @@
   var obj = {};
 
   ns.Form2JSON = function(elID){
-
     var defaults = { delimiter: "." };
-    this.o = {};
-    this.elID, this.el, this.items = null;
+
+    this.o = {},
+    this.elID = elID,
+    this.el, this.items = null;
 
     if (arguments[1] && typeof arguments[1] === "object") {
-      this.options = extendDefaults(defaults, arguments[0]);
+      this.options = extendDefaults(defaults, arguments[1]);
+    } else {
+      this.options = defaults;
     }
 
   }
 
   Form2JSON.prototype.load = function(){
 
-    if(!this.elID){
+    if(!this.el){
       try {
-        this.el = document.getElementById(el);
+        this.el = document.getElementById(this.elID);
         this.items  = this.el.elements;
       } catch (e) {
         ns.error = ('ERROR: Provided form element ID is not valid or the form is empty. Details: ', e);
         return false;
       }
+    } else {
+      this.o = {};
     }
-    mapForm();
-    this.o = JSON.stringify(this.o, undefined, 2);
 
-  }
-
-
-  // ns.load = function (el){
-  //   ns.o = {};
-
-  //   if(!ns.el){
-  //     try {
-  //       ns.el = document.getElementById(el);
-  //       ns.items  = ns.el.elements;
-  //     } catch (e) {
-  //       ns.error = ('ERROR: Provided form element ID is not valid or the form is empty. Details: ', e);
-  //       return false;
-  //     }
-
-  //   }
-
-  //   mapForm();
-  //   ns.o = JSON.stringify(ns.o, undefined, 2);
-  // }
-
-  function mapForm(){
     for (var i=0; i<=this.items.length; i++){
       var propName, propValue, currEl = this.items[i];
 
       if (typeof currEl !== 'undefined' && currEl.type != 'fieldset' && currEl.type != 'button') {
         propName  = currEl.getAttribute('name');
-        propValue = getElValue(currEl);
-
-        if (propName.indexOf(this.settings.delimiter) !== -1){
-          delimitedToObject(obj, propName.split(this.settings.delimiter), propValue);
+        propValue = getElValue(currEl, this.o);
+        console.log(ns.Form2JSON)
+        if (propName.indexOf(this.options.delimiter) !== -1){
+          delimitedToObject(obj, propName.split(this.options.delimiter), propValue);
           objectToOutput(obj, this.o);
         } else {
           this.o[propName] = propValue;
         }
       }
     }
+
+    this.o = JSON.stringify(this.o, undefined, 2);
   }
 
   function delimitedToObject (obj, path, value){
@@ -90,7 +73,7 @@
     }
   }
 
-  function getElValue(currEl){
+  function getElValue(currEl, outputObj){
     var v   = null,
         lv  = [];
 
@@ -104,7 +87,7 @@
           break;
         case 'checkbox':
           if (hasSiblings(currEl.name)){
-            v = (currEl.name in this.o) ? ns.o[currEl.name] : lv;
+            v = (currEl.name in outputObj) ? outputObj[currEl.name] : lv;
           }
 
           if(currEl.value != ""){
