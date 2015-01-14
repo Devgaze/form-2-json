@@ -1,37 +1,68 @@
 ;(function (ns) {
 
   'use strict';
+  var obj = {};
 
-  var obj     = {};
-  ns.settings = {
-                  delimiter: "."
-                };
+  ns.Form2JSON = function(elID){
 
-  ns.load = function (el){
-    ns.o = {};
+    var defaults = { delimiter: "." };
+    this.o = {};
+    this.elID, this.el, this.items = null;
 
-    if(!ns.el){
-      ns.el = document.getElementById(el);
-      ns.items  = ns.el.elements;
+    if (arguments[1] && typeof arguments[1] === "object") {
+      this.options = extendDefaults(defaults, arguments[0]);
     }
 
-    mapForm();
-    ns.o = JSON.stringify(ns.o, undefined, 2);
   }
 
+  Form2JSON.prototype.load = function(){
+
+    if(!this.elID){
+      try {
+        this.el = document.getElementById(el);
+        this.items  = this.el.elements;
+      } catch (e) {
+        ns.error = ('ERROR: Provided form element ID is not valid or the form is empty. Details: ', e);
+        return false;
+      }
+    }
+    mapForm();
+    this.o = JSON.stringify(this.o, undefined, 2);
+
+  }
+
+
+  // ns.load = function (el){
+  //   ns.o = {};
+
+  //   if(!ns.el){
+  //     try {
+  //       ns.el = document.getElementById(el);
+  //       ns.items  = ns.el.elements;
+  //     } catch (e) {
+  //       ns.error = ('ERROR: Provided form element ID is not valid or the form is empty. Details: ', e);
+  //       return false;
+  //     }
+
+  //   }
+
+  //   mapForm();
+  //   ns.o = JSON.stringify(ns.o, undefined, 2);
+  // }
+
   function mapForm(){
-    for (var i=0; i<=ns.items.length; i++){
-      var currEl = ns.items[i];
+    for (var i=0; i<=this.items.length; i++){
+      var propName, propValue, currEl = this.items[i];
 
       if (typeof currEl !== 'undefined' && currEl.type != 'fieldset' && currEl.type != 'button') {
-        var propName  = currEl.getAttribute('name'),
-            propValue = getElValue(currEl);
+        propName  = currEl.getAttribute('name');
+        propValue = getElValue(currEl);
 
-        if (propName.indexOf(ns.settings.delimiter) !== -1){
-          delimitedToObject(obj, propName.split(ns.settings.delimiter), propValue);
-          objectToOutput(obj, ns.o);
+        if (propName.indexOf(this.settings.delimiter) !== -1){
+          delimitedToObject(obj, propName.split(this.settings.delimiter), propValue);
+          objectToOutput(obj, this.o);
         } else {
-          ns.o[propName] = propValue;
+          this.o[propName] = propValue;
         }
       }
     }
@@ -73,7 +104,7 @@
           break;
         case 'checkbox':
           if (hasSiblings(currEl.name)){
-            v = (currEl.name in ns.o) ? ns.o[currEl.name] : lv;
+            v = (currEl.name in this.o) ? ns.o[currEl.name] : lv;
           }
 
           if(currEl.value != ""){
@@ -110,5 +141,14 @@
     return false;
   }
 
+  function extendDefaults(obj, props) {
+    var p;
+    for (p in props) {
+      if (props.hasOwnProperty(p)) {
+        obj[p] = props[p];
+      }
+    }
+    return obj;
+  }
 
-})( window.Form2JSON = window.Form2JSON || {} );
+})(window, undefined);

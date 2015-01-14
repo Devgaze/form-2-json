@@ -19,7 +19,7 @@
         padding: 1em;
         background-color:
         display: none;
-        word-wrap: break-word;
+        word-wrap: break-wor  d;
       }
       pre.flash
       {
@@ -181,6 +181,7 @@
         pre.innerHTML = txt;
         pre.className = 'flash';
       }
+      var mySerializer = new Form2JSON('myForm');
 
       document.addEventListener('DOMContentLoaded', function() {
         submit.onclick = function(e){
@@ -191,9 +192,8 @@
             pre = document.createElement('pre');
             output.appendChild(pre);
           }
-
-          Form2JSON.load('myForm');
-          result = Form2JSON.o;
+          mySerializer.load();
+          result = mySerializer.o;
           showResult(result);
         }
       }, false);
