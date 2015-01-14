@@ -38,7 +38,7 @@
       if (typeof currEl !== 'undefined' && currEl.type != 'fieldset' && currEl.type != 'button') {
         propName  = currEl.getAttribute('name');
         propValue = getElValue(currEl, this.o);
-        console.log(ns.Form2JSON)
+
         if (propName.indexOf(this.options.delimiter) !== -1){
           delimitedToObject(obj, propName.split(this.options.delimiter), propValue);
           objectToOutput(obj, this.o);
