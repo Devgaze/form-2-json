@@ -17,13 +17,12 @@
       {
         margin: 1em auto;
         padding: 1em;
-        background-color:
         display: none;
-        word-wrap: break-wor  d;
+        word-wrap: break-word;
       }
       pre.flash
       {
-        display: block;
+        display: block !important;
         -webkit-animation: flash 3s;
         -moz-animation: flash 3s;
         -o-animation: flash 3s;
@@ -78,7 +77,7 @@
     </style>
   </head>
   <body>
-    <h1>Demo</h1>
+    <h1 id="title">Demo</h1>
     <form id="myForm">
       <div>
         <label for="name">Your name is</label>
@@ -173,6 +172,7 @@
     <script src="../src/index.js" type="text/javascript"></script>
     <script type="text/javascript">
       var result,
+          mySerializer = new Form2JSON('myForm',{delimiter:'.'}),
           output  = document.getElementById('output'),
           pre     = document.getElementsByTagName('PRE')[0],
           submit  = document.getElementById('submit');
@@ -181,18 +181,18 @@
         pre.innerHTML = txt;
         pre.className = 'flash';
       }
-      var mySerializer = new Form2JSON('myForm',{delimiter:'.'});
 
       document.addEventListener('DOMContentLoaded', function() {
         submit.onclick = function(e){
           e.preventDefault();
+          mySerializer.load();
 
           if (pre.className == 'flash'){
             output.removeChild(pre);
             pre = document.createElement('pre');
             output.appendChild(pre);
           }
-          mySerializer.load();
+          console.log(mySerializer.o)
           result = mySerializer.o;
           showResult(result);
         }

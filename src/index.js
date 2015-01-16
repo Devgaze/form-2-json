@@ -5,6 +5,10 @@
 
   ns.Form2JSON = function(elID){
 
+    if (!elID){
+      throw "You must specify which form selector (id) must be loaded."
+    }
+
     var defaults = { delimiter: "." };
 
     this.o = {},
@@ -21,35 +25,50 @@
 
   Form2JSON.prototype.load = function(){
 
-    if(!this.el){
-      try {
+    try {
+      if(!this.el){
         this.el = document.getElementById(this.elID);
+
+        if (!this.el){
+          throw "Provided selector (#"+this.elID+") doesn't exist.";
+        } else if (this.el && this.el.nodeName != 'FORM'){
+          throw "Provided selector (#"+this.elID+") does exist, but it's not a HTML FORM element.";
+        }
+
         this.items  = this.el.elements;
-      } catch (e) {
-        ns.error = ('ERROR: Provided form element ID is not valid or the form is empty. Details: ', e);
-        return false;
+
+      } else {
+        this.o = {};
       }
-    } else {
-      this.o = {};
-    }
 
-    for (var i=0; i<=this.items.length; i++){
-      var propName, propValue, currEl = this.items[i];
+      if (this.items.length <= 0)
+        throw "Your form doesn't contain any form elements."
 
-      if (typeof currEl !== 'undefined' && currEl.type != 'fieldset' && currEl.type != 'button') {
-        propName  = currEl.getAttribute('name');
-        propValue = getElValue(currEl, this.o);
+      for (var i=0; i<=this.items.length; i++){
+        var propName, propValue, currEl = this.items[i];
 
-        if (propName.indexOf(this.options.delimiter) !== -1){
-          delimitedToObject(obj, propName.split(this.options.delimiter), propValue);
-          objectToOutput(obj, this.o);
-        } else {
-          this.o[propName] = propValue;
+        if (typeof currEl !== 'undefined' && currEl.type != 'fieldset' && currEl.type != 'button') {
+          propName  = currEl.getAttribute('name');
+          propValue = getElValue(currEl, this.o);
+
+          if (propName.indexOf(this.options.delimiter) !== -1){
+            delimitedToObject(obj, propName.split(this.options.delimiter), propValue);
+            objectToOutput(obj, this.o);
+          } else {
+            this.o[propName] = propValue;
+          }
         }
       }
-    }
 
-    this.o = JSON.stringify(this.o, undefined, 2);
+      this.o = JSON.stringify(this.o, undefined, 2);
+      return true;
+
+    } catch (e){
+      this.error = e;
+      this.o = JSON.stringify(this.o, undefined, 2);
+      console.log('%cForm2JSON exception: ' + e, 'color:magenta;');
+      return false;
+    }
 
   }
 
@@ -135,5 +154,5 @@
     }
     return obj;
   }
-
+  return Form2JSON;
 })(window, undefined);
