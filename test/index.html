@@ -6,19 +6,112 @@
 
   <link rel="shortcut icon" type="image/png" href="lib/jasmine-2.1.3/jasmine_favicon.png">
   <link rel="stylesheet" href="lib/jasmine-2.1.3/jasmine.css">
+  <style type="text/css">
+    .hidden { display: none; }
+  </style>
+</head>
 
+<body>
+  <div class="hidden">
+    <h1 id="title">Demo</h1>
+    <form id="myForm">
+      <div>
+        <label for="name">Your name is</label>
+        <input type="text" name="name" id="name" value="" placeholder="enter your name" />
+      </div>
+      <div>
+        <label for="gender">And you are a</label>
+        <select name="gender" id="gender">
+          <option value="w">woman</option>
+          <option value="m">man</option>
+        </select>
+      </div>
+      <fieldset><legend>Home address</legend>
+        <div>
+          <label for="city">City</label>
+          <input type="text" name="home.address.city" id="city" />
+        </div>
+        <div>
+          <label for="country">Country</label>
+          <input type="text" name="home.address.country" id="country" />
+        </div>
+        <div>
+          <label for="postal">Postal code</label>
+          <input type="text" name="home.address.postal" id="postal" />
+        </div>
+        <div>
+          <label for="street">Street</label>
+          <input type="text" name="home.address.street" id="street" />
+        </div>
+      </fieldset>
+
+      <div>
+        <label for="public-privacy">And you would like your profile privacy to set as</label>
+        <input type="radio" name="privacy" id="public-privacy" value="1" /> <label for="public-privacy">public</label>
+        <input type="radio" name="privacy" id="private-privacy" value="0" />  <label for="private-privacy">private</label>
+      </div>
+      <fieldset><legend>You like...</legend>
+        <div>
+          <input type="checkbox" name="car" id="audi" value="audi" /> <label for="audi">Audi</label>
+        </div>
+        <div>
+          <input type="checkbox" name="car" id="bmw" value="bmw" /> <label for="bmw">BMW</label>
+        </div>
+        <div>
+          <input type="checkbox" name="car" id="ford" value="ford" /> <label for="ford">Ford</label>
+        </div>
+        <div>
+          <input type="checkbox" name="car" id="dodge" value="dodge" /> <label for="dodge">Dodge</label>
+        </div>
+      </fieldset>
+      <fieldset><legend>And not so much...</legend>
+        <div>
+          <select id="food" name="food" multiple="multiple">
+            <option value="mushrooms">Mushrooms</option>
+            <option value="green-beans">Green beans</option>
+            <option value="poutine">Poutine</option>
+            <option value="potato">Potato</option>
+            <option value="olives">Olives</option>
+          </select>
+        </div>
+      </fieldset>
+      <fieldset><legend>But your dream is to have a...</legend>
+        <div>
+          <input type="checkbox" name="dream.house" id="house" /> <label for="house">House</label>
+        </div>
+        <div>
+          <input type="checkbox" name="dream.boat" id="boat" /> <label for="boat">Boat</label>
+        </div>
+        <div>
+          <input type="checkbox" name="dream.freedom" id="freedom" /> <label for="freedom">Freedom</label>
+        </div>
+        <div>
+          <input type="checkbox" name="dream.job" id="job" /> <label for="job">Job</label>
+        </div>
+      </fieldset>
+      <div>
+        <label for="active">Active</label>
+        <input type="checkbox" name="active" id="active" />
+      </div>
+      <div>
+        <label for="note">Final words</label>
+        <textarea name="note" id="note"></textarea>
+      </div>
+      <div>
+        <input type="button" name="submit" id="submit" value="Click me" />
+      </div>
+    </form>
+  </div>
   <script src="lib/jasmine-2.1.3/jasmine.js"></script>
   <script src="lib/jasmine-2.1.3/jasmine-html.js"></script>
   <script src="lib/jasmine-2.1.3/boot.js"></script>
+  <script src="lib/jquery.min.js"></script>
+  <script src="lib/jasmine-jquery.min.js"></script>
 
   <!-- include source files here... -->
   <script src="../src/index.js"></script>
 
   <!-- include spec files here... -->
   <script src="spec/form-2-json.js"></script>
-
-</head>
-
-<body>
 </body>
 </html>
