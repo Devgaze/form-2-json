@@ -1,5 +1,3 @@
-// jasmine.getFixtures().fixturesPath = 'fixtures/';
-
 describe("Testing Form-2-JSON", function(){
 
   var module, module_missing_selector, module_invalid_selector;
@@ -9,7 +7,6 @@ describe("Testing Form-2-JSON", function(){
     module_missing_selector = new Form2JSON("fakeElementId");
     // module_invalid_selector = new Form2JSON("title");
 
-    // loadFixtures("index.html");
     module.load();
   });
 
