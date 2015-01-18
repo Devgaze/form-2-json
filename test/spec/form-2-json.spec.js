@@ -43,13 +43,6 @@ describe("Testing Form-2-JSON", function(){
       expect(module_missing_selector.load()).toBeFalsy();
     });
 
-
-    // it('to fail if loaded element is not the FORM element', function(){
-    //   console.log(module_invalid_selector)
-    //   expect(module_invalid_selector.el.nodeName).not.toBe("FORM");
-    // });
-
-
   });
 
 });
