@@ -1,5 +1,6 @@
-form-2-json
-===========
+# form-2-json
+
+## >>> Work in progress - ignore this package for now! <<<
 
 Lightweight & fast, pure Javascript, plugin for serializing HTML forms as a key/value pair (JSON) object.
 The main idea behind this plugin is the ability to understand `dot notation` inside of the `name` attribute, for more meaningful output.
